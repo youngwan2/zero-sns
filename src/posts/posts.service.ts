@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
-export interface Post {
+export interface Posts {
   id: number;
   author: string;
   title: string;
@@ -9,40 +9,57 @@ export interface Post {
   commentCount: number;
 }
 
-const posts: Post[] = [
+const posts: Posts[] = [
   {
     id: 1,
     author: 'kim young wan',
-    title: '오늘은 내가 벡엔드',
-    content: '오늘은 내가 벡엔드 엔지니어가 되어서 서버를 개발했다.',
-    likeCount: 555,
-    commentCount: 5555,
+    title: '제목',
+    content: '오늘은 백엔드',
+    likeCount: 5,
+    commentCount: 0
   },
   {
     id: 2,
     author: 'kim young wan',
-    title: '오늘은 내가 벡엔드2',
-    content: '오늘은 내가 벡엔드 엔지니어가 되어서 서버를 개발했다.22',
-    likeCount: 5552,
-    commentCount: 55552,
+    title: '제목',
+    content: '오늘은 백엔드',
+    likeCount: 5,
+    commentCount: 0
   },
   {
     id: 3,
     author: 'kim young wan',
-    title: '오늘은 내가 벡엔드4',
-    content: '오늘은 내가 벡엔드 엔지니어가 되어서 서버를 개발했다.5',
-    likeCount: 555,
-    commentCount: 5555,
-  },
+    title: '제목',
+    content: '오늘은 백엔드',
+    likeCount: 5,
+    commentCount: 0
+  }
 ];
 
 @Injectable()
 export class PostsService {
-  getAllPost(): Post[] {
+  getPosts(): Posts[] {
     return posts;
   }
 
-  getChoicePost(id): Post {
-    return posts[id];
+  getPost(id: number): Posts[] {
+    const pick = posts.filter((post) => {
+      return post.id === id;
+    });
+    const hasPost = pick.length > 0;
+    if (!hasPost) {
+      throw new NotFoundException();
+    }
+    return pick;
+  }
+
+  addPost(newPost: Posts) {
+    posts.push(newPost);
+    console.log(posts);
+  }
+
+  updatePost(id: number, title: string) {
+    posts[id].title = title;
+    return posts;
   }
 }
